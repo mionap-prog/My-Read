@@ -34,7 +34,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 6. **[DONE] Home page `/`.**
    Heading "My Reads", a "New entry" button linking to `/books/new`, "Last 3 read" and "Next 3 I want to read" lists, each with its own empty message. Make each book link to its page.
 
-7. **Layout and navigation.**
+7. **[DONE] Layout and navigation.**
    Shared header in `app/layout.tsx` (or `app/components/`) with links to Home, All books and New entry. Make sure text is readable and nothing overflows at 1280 px and 375 px (check the touch target size on phone).
 
 8. **Final checks and README.**
