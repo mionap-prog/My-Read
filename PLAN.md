@@ -14,13 +14,13 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 
 ## Steps
 
-1. **Compare browser storage options and recommend one (no code).**
+1. **[DONE] Compare browser storage options and recommend one (no code).**
    Compare localStorage, IndexedDB, cookies and the File System Access API, plus sessionStorage as the one to rule out. Cover persistence across reload and tab close, size limits, sync vs async API, complexity, and fit for a few hundred small records. Cite sources. Expected recommendation: **localStorage**, one JSON array under a single key. It is simple, synchronous, survives closing the tab, and needs no package. IndexedDB would be overkill here. Write the choice and reasons into `docs/` and update the "Where data is saved" line in `AGENTS.md`. Stop for approval before building.
 
-2. **Book type and storage module.**
+2. **[DONE] Book type and storage module.**
    Add `app/lib/books.ts` with the `Book` type (the field list above, `source` and `status` as union types) and small functions: `getBooks`, `getBook(id)`, `addBook`, `updateBook`, `deleteBook`. Generate `id` with `crypto.randomUUID()` and set `addedAt` when a book is added. Guard against missing `localStorage`, bad JSON and an empty store. Add a small shared hook in `app/lib/` that reads books on the client after mount, so server and client HTML match. Test in the browser console.
 
-3. **All books page `/books`.**
+3. **[DONE] All books page `/books`.**
    List every book (title, author, status, source, language), each linking to `/books/[id]`. Friendly empty-state message plus a link to add the first book. Reload the page to confirm books stay saved.
    There is no add form yet, so add test books from the browser console with `books.addBook({ ... })` (available through the temporary `DevConsole`, removed in step 4).
 
