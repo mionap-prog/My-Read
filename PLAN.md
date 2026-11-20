@@ -37,7 +37,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 7. **[DONE] Layout and navigation.**
    Shared header in `app/layout.tsx` (or `app/components/`) with links to Home, All books and New entry. Make sure text is readable and nothing overflows at 1280 px and 375 px (check the touch target size on phone).
 
-8. **Final checks and README.**
+8. **[DONE] Final checks and README.**
    Run `npm run lint` and `npm run build`. Walk through every "Done means" item below. Update `README.md` (what it is, how to run, a screenshot) and `AGENTS.md` (pages, data storage, rules), as `108.md` asks for the submission.
 
 ## Done means

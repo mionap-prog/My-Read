@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Reads
 
-## Getting Started
+A small reading list that runs in your browser. Add books, note where each one comes from (Owned, Borrowed or Library) and its language, and mark each as Want to read, Reading or Read. You can edit and delete books, and everything stays saved after a reload or after closing and reopening the tab.
 
-First, run the development server:
+![My Reads screenshot](docs/screenshot.png)
+
+<!-- Add a screenshot of the app at docs/screenshot.png -->
+
+## Pages
+
+| Address | What it does |
+| --- | --- |
+| `/` | Home: "New entry" button, the last 3 books read, and the next 3 books to read |
+| `/books` | All books, each linking to its own page |
+| `/books/new` | Add a book (title is required) |
+| `/books/[id]` | View, edit or delete one book. Unknown ids show a "book not found" message |
+
+## Run it locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other commands: `npm run lint` and `npm run build`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
 
-To learn more about Next.js, take a look at the following resources:
+No backend, no accounts and no extra packages.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where data is saved
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Books are saved in your browser's `localStorage`, as one JSON array under the key `my-reads:books`. The data stays on your machine, in the browser you used, so another browser or a private window will show an empty list. Clearing site data removes the books. The reasons for choosing `localStorage` over IndexedDB, cookies and the File System Access API are in [`docs/storage-decision.md`](docs/storage-decision.md). The book fields are in [`docs/data-model.md`](docs/data-model.md).
 
-## Deploy on Vercel
+## Project notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [`AGENTS.md`](AGENTS.md): instructions for the coding agent (app details and rules)
+- [`PLAN.md`](PLAN.md): the step-by-step backlog the app was built from
