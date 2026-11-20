@@ -28,7 +28,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
    Form with the six fields. The title is required, and a book without a title is not added (show an inline message). Source and status are selects; notes is a textarea. Save, then go to `/books`. Test at 1280 px and 375 px.
    Once this page uses `addBook`, remove the temporary `DevConsole` (delete `app/components/DevConsole.tsx` and its import and `<DevConsole />` lines in `app/layout.tsx`).
 
-5. **Book page `/books/[id]`: view, edit, delete.**
+5. **[DONE] Book page `/books/[id]`: view, edit, delete.**
    Show one book with an edit form (same title validation) and a delete button with a confirm. After saving or deleting, go back to `/books`. Show a friendly "book not found" message for an unknown id. Test persistence: reload, close and reopen the tab.
 
 6. **Home page `/`.**
