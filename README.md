@@ -2,9 +2,18 @@
 
 A small reading list that runs in your browser. Add books, note where each one comes from (Owned, Borrowed or Library) and its language, and mark each as Want to read, Reading or Read. You can edit and delete books, and everything stays saved after a reload or after closing and reopening the tab.
 
-![My Reads screenshot](docs/screenshot.png)
-
-<!-- Add a screenshot of the app at docs/screenshot.png -->
+<table>
+  <tr>
+    <td align="center" valign="top">
+      <img src="docs/screenshot-desktop.png" alt="My Reads on desktop" width="600"><br>
+      <sub>Desktop</sub>
+    </td>
+    <td align="center" valign="top">
+      <img src="docs/screenshot-mobile.png" alt="My Reads on a phone" width="220"><br>
+      <sub>Phone</sub>
+    </td>
+  </tr>
+</table>
 
 ## Pages
 
