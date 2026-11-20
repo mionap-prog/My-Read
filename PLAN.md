@@ -31,7 +31,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 5. **[DONE] Book page `/books/[id]`: view, edit, delete.**
    Show one book with an edit form (same title validation) and a delete button with a confirm. After saving or deleting, go back to `/books`. Show a friendly "book not found" message for an unknown id. Test persistence: reload, close and reopen the tab.
 
-6. **Home page `/`.**
+6. **[DONE] Home page `/`.**
    Heading "My Reads", a "New entry" button linking to `/books/new`, "Last 3 read" and "Next 3 I want to read" lists, each with its own empty message. Make each book link to its page.
 
 7. **Layout and navigation.**
