@@ -11,6 +11,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 - No new npm packages without asking. No secrets in source files.
 - Tailwind defaults, clean and simple (`docs/brand-guide.md`).
 - Commit after each stable step. Run `npm run lint` and `npm run build` before each commit.
+- Books saved earlier must keep working. Any new Book field is optional (missing means "not set"), `isBook()` accepts books without it, and nothing rewrites stored data.
 
 ## Steps
 
@@ -40,6 +41,68 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 8. **[DONE] Final checks and README.**
    Run `npm run lint` and `npm run build`. Walk through every "Done means" item below. Update `README.md` (what it is, how to run, a screenshot) and `AGENTS.md` (pages, data storage, rules), as `108.md` asks for the submission.
 
+9. **Design pass: a clean, consistent look.**
+   **Before building, ask me for direction:** tone, colours, fonts, spacing and button shape. Save the answers in `docs/brand-guide.md` (replace "Not decided yet"), with the concrete tokens and Tailwind classes chosen.
+   Change what exists, don't add copies: define colours and fonts as tokens in `app/globals.css` and remove the `font-family: Arial` override that hides the Geist font; extract a shared `BookRow` in `app/components/` (the same row is repeated in `app/page.tsx` and `app/books/page.tsx`); share button and field styles (now repeated inline in `page.tsx`, `books/page.tsx`, `BookForm.tsx`, `books/[id]/page.tsx`, `Header.tsx`). Restyle header, headings, lists, empty states, forms and status labels. No behaviour change.
+   **Done means:**
+   - `docs/brand-guide.md` records my choices and the tokens, and AGENTS.md still points to it.
+   - Every page uses the same colours, fonts, spacing and button shape, with no leftover default styling.
+   - Text is readable in light and dark, nothing overflows at 1280 px and 375 px, touch targets are at least 44 px.
+   - All "Done means" items below still pass, and `npm run lint` and `npm run build` pass.
+
+## Extras (only if time)
+Not required. Do them in this order, one at a time, only after step 9. Each follows the rules above (commit per extra, lint and build, update `docs/data-model.md` and `AGENTS.md` when data or pages change). Mark one `[DONE]` when finished.
+
+**Extra 1. "Currently reading" on the home page.**
+In `app/page.tsx`, add a "Currently reading" section for books with status Reading, above "Last 3 read". Reuse `BookList` and the filter next to `latestWithStatus` (give it a limit; show all Reading books). Own empty message. No data change.
+Done means:
+- Books with status Reading appear under "Currently reading", and changing a book's status moves it between sections after saving.
+- With no Reading books a friendly empty message shows, and the loading state matches the other sections.
+- Each entry links to its page, looks consistent with step 9, and works at 375 px.
+
+**Extra 2. Dates.**
+Add optional `startedAt` and `finishedAt` to `Book` and `NewBook`, stored as `YYYY-MM-DD` (from `<input type="date">`, so no time-zone shifts). `isBook()` accepts them missing and rejects malformed values. In `BookForm.tsx`, "Started" shows for Reading and Read, "Finished" only for Read, nothing for Want to read; finish before start is rejected with an inline message; dates that don't fit the status are dropped on save; when status becomes Read and "Finished" is empty, prefill today (editable). Show dates on `/books` rows and the book page. "Last 3 read" sorts by `finishedAt` (fallback `addedAt` for books without one); "Currently reading" sorts by `startedAt` (fallback `addedAt`). Put the shared "effective date" helper in `app/lib/books.ts`. This replaces the "last 3 read" assumption below.
+Done means:
+- Date fields appear only for the right statuses and disappear when status changes; end before start is rejected with a message.
+- Saved dates survive reload and show in lists and on the book page.
+- "Last 3 read" follows end date, and an old Read book with no end date still appears in a sensible place.
+- A book saved before this extra (no date fields) still loads, lists and edits. Test by seeding old-shape JSON in localStorage.
+- Lint and build pass, data model doc updated.
+
+**Extra 3. Stars (1–5).**
+Add optional `rating` (1 to 5) to `Book` and `NewBook`; `isBook()` accepts it missing and rejects other values; it is dropped on save unless status is Read. New `app/components/StarRating.tsx` with an input mode (in `BookForm`, only for Read, a radio group of five buttons at least 44 px, with a way to clear it) and a read-only mode (on `/books` rows and the book page, with a text alternative like "4 out of 5 stars"). No package.
+Done means:
+- Stars appear only when status is Read, and are hidden and not saved otherwise.
+- A rating can be set, changed and cleared, persists after reload, and shows on `/books` and the book page; it works with the keyboard and has a screen-reader label.
+- Unrated and older Read books show no stars (not 0 stars) and still work.
+- Lint and build pass, data model doc updated.
+
+**Extra 4. Filter and search on `/books`.**
+In `app/books/page.tsx`, add a status filter (All / Want to read / Reading / Read) and a search box matching title or author (case-insensitive, trimmed), combined. Plain React state, no URL params. Controls show only when the list is not empty.
+Done means:
+- Filter and search work alone and together, and "Clear" resets them.
+- Two different empty states: "No books yet" (empty library, link to add) and "No books match" (filters active, clear-filters action). A result count is shown.
+- Controls wrap and inputs are at least 44 px at 375 px, and older books still match.
+- Lint and build pass.
+
+**Extra 5. Export / Import.**
+A "Backup" section at the bottom of `/books`, visible even with an empty library so a fresh browser can import. In `app/lib/books.ts` (export `isBook`): `exportBooks()` downloads `my-reads-YYYY-MM-DD.json` containing `{ app: "my-reads", version: 1, exportedAt, books }`; `parseImport(text)` accepts that wrapper or a bare array, validates each entry with `isBook()`, counts valid and skipped, never throws; `importBooks(books, mode)` merges by `id` by default (existing books kept, new ids added, same id skipped), with "replace everything" only behind a confirm. Show a result message ("Imported 12, skipped 1 invalid, 3 already present") and an inline error for non-JSON or wrong files. If Extra 6 exists, also include its goals (file `version` 2, `goals` optional, version 1 files still import).
+Done means:
+- Export downloads a file with every book (including dates and ratings if those extras exist), and that file imports back with identical data.
+- Importing into an empty browser restores the list, and importing the same file twice creates no duplicates.
+- A broken, empty or wrong file shows a clear message and changes nothing.
+- A file exported before Extras 2 and 3 (old shape) imports fine.
+- Lint and build pass, file format documented in `docs/data-model.md`, AGENTS.md mentions it. (The File System Access API stays out, see `docs/storage-decision.md`.)
+
+**Extra 6. Yearly reading challenge.** (needs Extra 2)
+A goal per year in a second localStorage key `my-reads:goals`, a JSON object like `{ "2026": 24 }`. New `app/lib/goal.ts` with `getGoal(year)` and `setGoal(year, n)`, guarded like `books.ts` (missing storage, bad JSON, non-positive numbers). Count = books with status Read whose `finishedAt` is in the current year; Read books without `finishedAt` fall back to the year of `addedAt` (same rule as Extra 2). New `app/components/ReadingChallenge.tsx` card on the home page: "7 of 24 books in 2026" with a progress bar (`role="progressbar"`, values exposed) and a small form to set or change the goal. No goal set shows a prompt; past the goal shows completed.
+Done means:
+- Setting a goal persists after reload, and changing it updates the display.
+- The count equals the number of Read books finished this year and updates when a book is marked Read with an end date.
+- No goal, a goal of 0, blank or not a number, and a count above the goal all behave sensibly, in light and dark at 375 px.
+- Books from earlier years are not counted, and older books follow the documented fallback.
+- Lint and build pass, docs and AGENTS.md updated.
+
 ## Done means
 - A book without a title is not added.
 - An empty list shows a friendly message.
@@ -48,10 +111,10 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 - `npm run lint` and `npm run build` pass.
 
 ## Assumptions
-- **"Last 3 read":** the data model has no read date and dates are out of scope. Treat "last 3 read" as the three most recently added books with status Read, and "next 3 I want to read" as the three most recently added books with status Want to read.
+- **"Last 3 read":** the data model has no read date and dates are out of scope. Treat "last 3 read" as the three most recently added books with status Read, and "next 3 I want to read" as the three most recently added books with status Want to read. (Extra 2 would replace this for "Last 3 read": it would sort by end date.)
 
 ## Not now
-Dates, stars, yearly challenge, search, export, accounts.
+A second reader (needs accounts and a backend).
 
 ## Verification (end to end)
 1. `npm run dev`, open `localhost:3000`.
