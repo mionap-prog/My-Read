@@ -11,7 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## About this app
 
 - **What the app is:** A reading list where I add books, note where each book comes from and its language, and mark them as Want to read, Reading or Read.
-- **Where data is saved for now:** in the browser
+- **Where data is saved for now:** in the browser's `localStorage`, as one JSON array of books under a single key (no backend, no packages). Reasons in `docs/storage-decision.md`.
 - **Stack:** Next.js (App Router), TypeScript, Tailwind CSS
 - **How to run it:** `npm run dev`, then open `localhost:3000`
 - **Conventions:** new pages go in `app/`, shared components in `app/components/`
