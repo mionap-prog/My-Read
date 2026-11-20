@@ -20,12 +20,12 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 2. **Book type and storage module.**
    Add `app/lib/books.ts` with the `Book` type (the field list above, `source` and `status` as union types) and small functions: `getBooks`, `getBook(id)`, `addBook`, `updateBook`, `deleteBook`. Generate `id` with `crypto.randomUUID()` and set `addedAt` when a book is added. Guard against missing `localStorage`, bad JSON and an empty store. Add a small shared hook in `app/lib/` that reads books on the client after mount, so server and client HTML match. Test in the browser console.
 
-3. **Add-a-book page `/books/new`.**
+3. **All books page `/books`.**
+   List every book (title, author, status, source, language), each linking to `/books/[id]`. Friendly empty-state message plus a link to add the first book. Reload the page to confirm books stay saved.
+
+4. **Add-a-book page `/books/new`.**
    Form with the six fields. The title is required, and a book without a title is not added (show an inline message). Source and status are selects; notes is a textarea. Save, then go to `/books`. Test at 1280 px and 375 px.
    Once this page uses `addBook`, remove the temporary `DevConsole` (delete `app/components/DevConsole.tsx` and its import and `<DevConsole />` lines in `app/layout.tsx`).
-
-4. **All books page `/books`.**
-   List every book (title, author, status, source, language), each linking to `/books/[id]`. Friendly empty-state message plus a link to add the first book. Reload the page to confirm books stay saved.
 
 5. **Book page `/books/[id]`: view, edit, delete.**
    Show one book with an edit form (same title validation) and a delete button with a confirm. After saving or deleting, go back to `/books`. Show a friendly "book not found" message for an unknown id. Test persistence: reload, close and reopen the tab.
