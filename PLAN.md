@@ -22,6 +22,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 
 3. **All books page `/books`.**
    List every book (title, author, status, source, language), each linking to `/books/[id]`. Friendly empty-state message plus a link to add the first book. Reload the page to confirm books stay saved.
+   There is no add form yet, so add test books from the browser console with `books.addBook({ ... })` (available through the temporary `DevConsole`, removed in step 4).
 
 4. **Add-a-book page `/books/new`.**
    Form with the six fields. The title is required, and a book without a title is not added (show an inline message). Source and status are selects; notes is a textarea. Save, then go to `/books`. Test at 1280 px and 375 px.
