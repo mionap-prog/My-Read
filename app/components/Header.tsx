@@ -7,15 +7,20 @@ import { Suspense } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/books", label: "All books" },
-  { href: "/books/new", label: "New entry" },
+  { href: "/books/read", label: "Last reads" },
+  { href: "/books/next", label: "Next reads" },
 ];
 
 // Which link is active for the current path.
-// /books/new belongs to "New entry"; /books and /books/[id] belong to "All books".
+// /books and /books/[id] belong to "All books"; /books/read and /books/next have
+// their own links; /books/new highlights nothing (the button is on the home page).
 function isActive(href: string, pathname: string): boolean {
   if (href === "/") return pathname === "/";
   if (href === "/books") {
-    return pathname.startsWith("/books") && pathname !== "/books/new";
+    return (
+      pathname.startsWith("/books") &&
+      !["/books/new", "/books/read", "/books/next"].includes(pathname)
+    );
   }
   return pathname === href;
 }

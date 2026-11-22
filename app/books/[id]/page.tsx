@@ -37,7 +37,7 @@ function BookDetail({ params }: { params: Promise<{ id: string }> }) {
       setDeleteError("Could not delete the book. Browser storage may be blocked.");
       return;
     }
-    router.push("/books");
+    router.push("/");
   }
 
   return (
@@ -72,7 +72,7 @@ function BookDetail({ params }: { params: Promise<{ id: string }> }) {
               if (!updateBook(id, values)) {
                 return "Could not save your changes. Browser storage may be blocked or full.";
               }
-              router.push("/books");
+              router.push("/");
             }}
           />
 

@@ -18,7 +18,7 @@ export default function NewBookPage() {
           if (!addBook(values)) {
             return "Could not save the book. Browser storage may be blocked or full.";
           }
-          router.push("/books");
+          router.push("/");
         }}
       />
     </main>

@@ -14,10 +14,13 @@ export type Book = {
   status: BookStatus;
   notes: string;
   addedAt: string; // ISO date string, set when the book is added
+  // ISO date string: when the book was added or its status last changed.
+  // Optional: books saved before this field existed don't have it.
+  statusChangedAt?: string;
 };
 
-// What the caller provides when adding a book (id and addedAt are generated).
-export type NewBook = Omit<Book, "id" | "addedAt">;
+// What the caller provides when adding a book (id, addedAt and statusChangedAt are generated).
+export type NewBook = Omit<Book, "id" | "addedAt" | "statusChangedAt">;
 
 export const STORAGE_KEY = "my-reads:books";
 
@@ -46,6 +49,9 @@ function isBook(value: unknown): value is Book {
     typeof b.language === "string" &&
     typeof b.notes === "string" &&
     typeof b.addedAt === "string" &&
+    (b.statusChangedAt === undefined ||
+      (typeof b.statusChangedAt === "string" &&
+        !Number.isNaN(Date.parse(b.statusChangedAt)))) &&
     SOURCES.includes(b.source as BookSource) &&
     STATUSES.includes(b.status as BookStatus)
   );
@@ -87,16 +93,19 @@ export function getBook(id: string): Book | undefined {
 export function addBook(input: NewBook): Book | null {
   const title = input.title.trim();
   if (!title) return null;
+  const now = new Date().toISOString();
   const book: Book = {
     ...input,
     title,
     id: crypto.randomUUID(),
-    addedAt: new Date().toISOString(),
+    addedAt: now,
+    statusChangedAt: now,
   };
   return saveBooks([...getBooks(), book]) ? book : null;
 }
 
 // Updates fields of an existing book (id and addedAt cannot change).
+// statusChangedAt is set to now only when the status actually changes.
 // Returns the updated book, or null if not found, the title is empty, or saving failed.
 export function updateBook(
   id: string,
@@ -105,7 +114,13 @@ export function updateBook(
   const books = getBooks();
   const index = books.findIndex((book) => book.id === id);
   if (index === -1) return null;
-  const updated: Book = { ...books[index], ...changes, id, addedAt: books[index].addedAt };
+  const old = books[index];
+  const updated: Book = { ...old, ...changes, id, addedAt: old.addedAt };
+  updated.statusChangedAt =
+    updated.status !== old.status
+      ? new Date().toISOString()
+      : old.statusChangedAt;
+  if (updated.statusChangedAt === undefined) delete updated.statusChangedAt;
   updated.title = updated.title.trim();
   if (!updated.title) return null;
   books[index] = updated;
@@ -118,4 +133,18 @@ export function deleteBook(id: string): boolean {
   const remaining = books.filter((book) => book.id !== id);
   if (remaining.length === books.length) return false;
   return saveBooks(remaining);
+}
+
+// When the book got its current status: statusChangedAt, or addedAt for books
+// saved before that field existed.
+function statusDate(book: Book): string {
+  return book.statusChangedAt ?? book.addedAt;
+}
+
+// Books with the given status, most recent status change first (same order
+// everywhere: home page, /books/read and /books/next). See PLAN.md Assumptions.
+export function booksWithStatus(books: Book[], status: BookStatus): Book[] {
+  return books
+    .filter((book) => book.status === status)
+    .sort((a, b) => statusDate(b).localeCompare(statusDate(a)));
 }

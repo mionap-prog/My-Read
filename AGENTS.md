@@ -12,13 +12,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - **What the app is:** A reading list where I add books, note where each book comes from and its language, and mark them as Want to read, Reading or Read.
 - **Pages:**
-  - `/` home: "New entry" button, last 3 read, next 3 to read
+  - `/` home: "My Reads" and a "New entry" button, then Currently reading (all Reading), Next 3 I want to read and Last 3 read (each with "See all")
   - `/books` all books, with an empty-state message
+  - `/books/read` all books with status Read, newest first
+  - `/books/next` all books with status Want to read, newest first
   - `/books/new` add a book (title required)
   - `/books/[id]` view, edit and delete one book, with a "book not found" message for unknown ids
-  - A shared header (`app/components/Header.tsx`) links to Home, All books and New entry
+  - A shared header (`app/components/Header.tsx`) links to Home, All books, Last reads and Next reads
 - **Where data is saved:** in the browser's `localStorage`, as one JSON array of books under the key `my-reads:books` (no backend, no packages). Reasons in `docs/storage-decision.md`; fields in `docs/data-model.md`.
-- **Data code:** `app/lib/books.ts` (the `Book` type and `getBooks`, `getBook`, `addBook`, `updateBook`, `deleteBook`) and `app/lib/useBooks.ts` (client hook that reads books after mount). Pages that use them are Client Components.
+- **Data code:** `app/lib/books.ts` (the `Book` type and `getBooks`, `getBook`, `addBook`, `updateBook`, `deleteBook`) and `app/lib/useBooks.ts` (client hook that reads books after mount). Pages that use them are Client Components. Shared lists: `app/components/BookList.tsx` and `BookListSection.tsx`; `booksWithStatus` in `books.ts` sorts newest first.
 - **Stack:** Next.js (App Router), TypeScript, Tailwind CSS
 - **How to run it:** `npm install`, then `npm run dev`, then open `localhost:3000`. Before a commit run `npm run lint` and `npm run build`.
 - **Conventions:** new pages go in `app/`, shared components in `app/components/`. Use the App Router only, never `pages/`. Tailwind defaults, clean and simple (`docs/brand-guide.md`).
