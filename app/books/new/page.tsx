@@ -9,7 +9,7 @@ export default function NewBookPage() {
 
   return (
     <main className="mx-auto w-full max-w-xl flex-1 px-4 py-10 sm:px-6 sm:py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">Add a book</h1>
+      <h1 className="heading text-3xl">Add a book</h1>
 
       <BookForm
         submitLabel="Save book"

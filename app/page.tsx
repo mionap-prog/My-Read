@@ -11,17 +11,17 @@ export default function Home() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6 sm:py-16">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-4xl font-semibold tracking-tight">My Reads</h1>
+        <h1 className="heading text-4xl">My Reads</h1>
         <Link
           href="/books/new"
-          className="inline-block rounded-md bg-zinc-900 px-4 py-2 text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="btn"
         >
           New entry
         </Link>
       </div>
 
       <section className="mt-10">
-        <h2 className="text-xl font-semibold tracking-tight">
+        <h2 className="heading text-2xl">
           Currently reading
         </h2>
         <BookListSection
@@ -32,7 +32,7 @@ export default function Home() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-xl font-semibold tracking-tight">
+        <h2 className="heading text-2xl">
           Next 3 I want to read
         </h2>
         <BookListSection
@@ -44,7 +44,7 @@ export default function Home() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-xl font-semibold tracking-tight">Last 3 read</h2>
+        <h2 className="heading text-2xl">Last 3 read</h2>
         <BookListSection
           books={booksWithStatus(books, "Read").slice(0, 3)}
           loaded={loaded}
