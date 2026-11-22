@@ -3,7 +3,7 @@
 ## Context
 My Reads is a single-user reading list (Next.js 16.4.6 App Router, React 19.3, TypeScript, Tailwind 4). Books are added with a source and language, and marked Want to read / Reading / Read. There is no backend, so data lives in the browser. This file is the backlog: read it before starting a new feature.
 
-The Book fields come from `docs/data-model.md`: `id`, `title` (required), `author`, `source` (Owned/Borrowed/Library), `language`, `status` (Want to read/Reading/Read), `notes`, `addedAt`.
+The Book fields come from `docs/data-model.md`: `id`, `title` (required), `author`, `source` (Owned/Borrowed/Library), `language`, `status` (Want to read/Reading/Read), `notes`, `addedAt`, and optional `statusChangedAt` (when the book was added or its status last changed).
 
 ## Rules that apply to every step
 - Before writing code, read the relevant bundled guide in `node_modules/next/dist/docs/01-app/` (AGENTS.md rule). Already checked: dynamic route `params` is a `Promise` (`await params` in a server page, `use(params)` or `useParams()` in a client component); browser-only APIs such as `localStorage` need a Client Component (`'use client'`).
@@ -26,11 +26,11 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
    There is no add form yet, so add test books from the browser console with `books.addBook({ ... })` (available through the temporary `DevConsole`, removed in step 4).
 
 4. **[DONE] Add-a-book page `/books/new`.**
-   Form with the six fields. The title is required, and a book without a title is not added (show an inline message). Source and status are selects; notes is a textarea. Save, then go to `/books`. Test at 1280 px and 375 px.
+   Form with the six fields. The title is required, and a book without a title is not added (show an inline message). Source and status are selects; notes is a textarea. Save, then go to the home page `/`. Test at 1280 px and 375 px.
    Once this page uses `addBook`, remove the temporary `DevConsole` (delete `app/components/DevConsole.tsx` and its import and `<DevConsole />` lines in `app/layout.tsx`).
 
 5. **[DONE] Book page `/books/[id]`: view, edit, delete.**
-   Show one book with an edit form (same title validation) and a delete button with a confirm. After saving or deleting, go back to `/books`. Show a friendly "book not found" message for an unknown id. Test persistence: reload, close and reopen the tab.
+   Show one book with an edit form (same title validation) and a delete button with a confirm. After saving or deleting, go to the home page `/`. Show a friendly "book not found" message for an unknown id. Test persistence: reload, close and reopen the tab.
 
 6. **[DONE] Home page `/`.**
    Heading "My Reads", a "New entry" button linking to `/books/new`, "Last 3 read" and "Next 3 I want to read" lists, each with its own empty message. Make each book link to its page.
@@ -41,8 +41,8 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 8. **[DONE] Final checks and README.**
    Run `npm run lint` and `npm run build`. Walk through every "Done means" item below. Update `README.md` (what it is, how to run, a screenshot) and `AGENTS.md` (pages, data storage, rules), as `108.md` asks for the submission.
 
-9. **Home page, header and two new list pages.**
-   - Two new pages: `/books/read` lists all books with status Read, and `/books/next` lists all books with status Want to read, newest first (same order as the home page, see Assumptions). Each has its own friendly empty message, and each book links to its page. Reuse the existing list components, don't copy them.
+9. **[DONE] Home page, header and two new list pages.**
+   - Two new pages: `/books/read` lists all books with status Read, and `/books/next` lists all books with status Want to read, most recent status change first (same order as the home page, see Assumptions). Each has its own friendly empty message, and each book links to its page. Reuse the existing list components, don't copy them.
    - Header links, in this order: Home, All books, Last reads (`/books/read`), Next reads (`/books/next`). Remove "New entry" from the header; the button on the home page stays.
    - Home page: "My Reads" on the left, the "New entry" button on the right. Then three sections in this order: Currently reading (all books with status Reading), Next 3 I want to read, Last 3 read. Each has its own friendly empty message. "Next 3" and "Last 3" end with a "See all" link to their page.
    - No data change.
@@ -122,7 +122,7 @@ Done means:
 - `npm run lint` and `npm run build` pass.
 
 ## Assumptions
-- **"Last 3 read":** the data model has no read date and dates are out of scope. Treat "last 3 read" as the three most recently added books with status Read, and "next 3 I want to read" as the three most recently added books with status Want to read. (Extra 2 would replace this for "Last 3 read": it would sort by end date.)
+- **"Last 3 read" and "Next 3 I want to read":** the data model has no read date and dates are out of scope. Order each list by `statusChangedAt` (set when a book is added and whenever its status changes on save), newest first, falling back to `addedAt` for books saved before that field existed. So a book marked Read today is at the top of "Last 3 read" even if it was added long ago. (Extra 2 would replace this for "Last 3 read": it would sort by end date.)
 
 ## Not now
 A second reader (needs accounts and a backend).

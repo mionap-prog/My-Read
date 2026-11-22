@@ -14,3 +14,4 @@ The data the app saves.
 | `status`   | one of `Want to read` / `Reading` / `Read` |                        |
 | `notes`    | longer text                              |                          |
 | `addedAt`  | date                                     | the date the book was added |
+| `statusChangedAt` | date (optional)                  | set when the book is added and whenever its status changes on save; books saved earlier don't have it, and lists fall back to `addedAt` |
