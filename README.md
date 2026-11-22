@@ -31,7 +31,7 @@ A header on every page links to Home, All books, Last reads and Next reads.
 
 ## Design
 
-A deep green page with a reading-corner picture pinned to the bottom, cream book cards, coral buttons, Fraunces headings and Geist text. It follows your computer's light or dark setting: dark mode uses a darker green and a night version of the picture. The choices are in [`docs/brand-guide.md`](docs/brand-guide.md).
+A green page with a reading-corner picture pinned to the bottom, cream book cards, coral buttons, Fraunces headings and Geist text. It follows your computer's light or dark setting: dark mode uses a darker green and a night version of the picture. Light mode is day and dark mode is evening. The choices are in [`docs/brand-guide.md`](docs/brand-guide.md).
 
 ## Run it locally
 

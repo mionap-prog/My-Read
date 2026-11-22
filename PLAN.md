@@ -54,7 +54,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 
 10. **[DONE] Design pass.**
    Direction is decided (no need to ask):
-   - Background on every page: `public/banner.svg`, pinned to the bottom of the page, centred, not repeating. Everything above it is flat green `#163A25`. Leave enough space at the bottom so the cards never cover the picture.
+   - Background on every page: `public/banner.svg`, pinned to the bottom of the page, centred, not repeating. Everything above it is flat green `#235E3A`. Leave enough space at the bottom so the cards never cover the picture.
    - Dark mode (`prefers-color-scheme: dark`): use `public/banner-dark.svg` and flat green `#0A1915` instead.
    - On phones, the picture is at least 220 px tall, centred, with the sides cropped.
    - Headings and buttons use the Fraunces font, loaded with `next/font/google` (no new npm package). Book titles and other text use Geist.
