@@ -136,4 +136,5 @@ A second reader (needs accounts and a backend).
 6. Resize to 1280 px and 375 px (browser dev tools): layout works and text is readable.
 7. Open `/books/read` and `/books/next` and check they list the right books.
 8. Switch the computer to dark mode and check every page.
-9. `npm run lint` and `npm run build` both pass.
+9. Open `/hello`: friendly not-found page.
+10. `npm run lint` and `npm run build` both pass.
