@@ -3,14 +3,15 @@
 Decided in step 10. Tokens live in `app/globals.css` (`:root` and `@theme inline`); shared classes (`.btn`, `.btn-outline`, `.text-link`, `.field`, `.field-label`, `.card`, `.empty-state`, `.heading`, `.error-text`) are in the same file under `@layer components`.
 
 ## Background
-- Every page: `public/banner.svg` pinned to the bottom, centred, no repeat. Above it flat green `#163A25`.
+- Every page: `public/banner.svg` pinned to the bottom, centred, no repeat. Above it flat green `#235E3A`.
 - Dark mode (`prefers-color-scheme: dark`): `public/banner-dark.svg` and flat green `#0A1915`.
+- Day and night: light mode is day (blue sky, sun, lamp off), dark mode is evening (lamp on, darker green).
 - Picture height is `--banner-h` = `max(220px, 100vw / 3)` (the SVG is 3:1), so it is always at least as wide as the window. On phones it is 220 px tall with the sides cropped. `body` has bottom padding of the same height so cards never cover it.
 
 ## Colours
 | Token | Value | Use |
 |---|---|---|
-| `page` | `#163A25` (dark `#0A1915`) | page background |
+| `page` | `#235E3A` (dark `#0A1915`) | page background |
 | `cream` | `#F4EEDC` | text on green, header links, outlines |
 | `card` | `#F7F1E3` | cards and form fields |
 | `ink` | `#2A1E1C` | text on cards |

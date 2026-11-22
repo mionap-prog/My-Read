@@ -2,7 +2,7 @@
 
 /* Design tokens. Values and reasons are in docs/brand-guide.md. */
 :root {
-  --page: #163a25;
+  --page: #235e3a;
   --banner: url("/banner.svg");
   /* Banner is 3:1. Height = window width / 3, so it is always at least as wide
      as the window. Never below 220px tall (phones crop the sides). */
