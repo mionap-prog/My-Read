@@ -52,7 +52,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
    - Empty messages show where there are no books; it works at 1280 px and 375 px.
    - Lint and build pass, and AGENTS.md lists the new pages.
 
-10. **Design pass.**
+10. **[DONE] Design pass.**
    Direction is decided (no need to ask):
    - Background on every page: `public/banner.svg`, pinned to the bottom of the page, centred, not repeating. Everything above it is flat green `#163A25`. Leave enough space at the bottom so the cards never cover the picture.
    - Dark mode (`prefers-color-scheme: dark`): use `public/banner-dark.svg` and flat green `#0A1915` instead.

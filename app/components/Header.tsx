@@ -27,7 +27,7 @@ function isActive(href: string, pathname: string): boolean {
 
 function Nav({ pathname }: { pathname: string | null }) {
   return (
-    <header className="border-b border-zinc-200 dark:border-zinc-800">
+    <header className="border-b border-cream/20">
       <nav
         aria-label="Main"
         className="mx-auto flex w-full max-w-3xl items-center gap-1 px-2 sm:gap-2 sm:px-4"
@@ -39,10 +39,10 @@ function Nav({ pathname }: { pathname: string | null }) {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`flex min-h-11 items-center border-b-2 px-3 text-base ${
+              className={`flex min-h-11 items-center border-b-2 px-3 text-base text-cream ${
                 active
-                  ? "border-zinc-900 font-semibold text-zinc-900 dark:border-zinc-100 dark:text-zinc-100"
-                  : "border-transparent text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  ? "border-cream font-semibold"
+                  : "border-transparent hover:border-cream/50"
               }`}
             >
               {label}

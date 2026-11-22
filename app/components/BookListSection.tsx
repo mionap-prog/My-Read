@@ -23,9 +23,9 @@ export default function BookListSection({
   return (
     <>
       {!loaded ? (
-        <p className="mt-3 text-zinc-600 dark:text-zinc-400">Loading…</p>
+        <p className="mt-3 text-cream/80">Loading…</p>
       ) : books.length === 0 ? (
-        <p className="mt-3 rounded-lg border border-dashed border-zinc-300 p-4 text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
+        <p className="empty-state mt-3">
           {emptyMessage}
         </p>
       ) : (
@@ -34,7 +34,7 @@ export default function BookListSection({
       {seeAll && (
         <Link
           href={seeAll.href}
-          className="mt-2 inline-flex min-h-11 items-center text-zinc-900 underline hover:text-zinc-600 dark:text-zinc-100 dark:hover:text-zinc-400"
+          className="text-link mt-2"
         >
           {seeAll.label}
         </Link>

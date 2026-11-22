@@ -7,10 +7,6 @@ import type { BookSource, BookStatus, NewBook } from "../lib/books";
 const SOURCES: BookSource[] = ["Owned", "Borrowed", "Library"];
 const STATUSES: BookStatus[] = ["Want to read", "Reading", "Read"];
 
-const fieldClass =
-  "mt-1 block min-h-11 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-base text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100";
-const labelClass = "block text-sm font-medium";
-
 const EMPTY_BOOK: NewBook = {
   title: "",
   author: "",
@@ -70,8 +66,8 @@ export default function BookForm({
   return (
     <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-5">
       <div>
-        <label htmlFor="title" className={labelClass}>
-          Title <span className="text-red-600 dark:text-red-400">(required)</span>
+        <label htmlFor="title" className="field-label">
+          Title <span className="text-alert">(required)</span>
         </label>
         <input
           id="title"
@@ -80,33 +76,33 @@ export default function BookForm({
           onChange={(e) => setTitle(e.target.value)}
           aria-invalid={titleError ? true : undefined}
           aria-describedby={titleError ? "title-error" : undefined}
-          className={fieldClass}
+          className="field"
         />
         {titleError && (
-          <p id="title-error" role="alert" className="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p id="title-error" role="alert" className="error-text mt-1">
             {titleError}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="author" className={labelClass}>Author</label>
+        <label htmlFor="author" className="field-label">Author</label>
         <input
           id="author"
           type="text"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          className={fieldClass}
+          className="field"
         />
       </div>
 
       <div>
-        <label htmlFor="source" className={labelClass}>Source</label>
+        <label htmlFor="source" className="field-label">Source</label>
         <select
           id="source"
           value={source}
           onChange={(e) => setSource(e.target.value as BookSource)}
-          className={fieldClass}
+          className="field"
         >
           {SOURCES.map((s) => (
             <option key={s} value={s}>{s}</option>
@@ -115,23 +111,23 @@ export default function BookForm({
       </div>
 
       <div>
-        <label htmlFor="language" className={labelClass}>Language</label>
+        <label htmlFor="language" className="field-label">Language</label>
         <input
           id="language"
           type="text"
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
-          className={fieldClass}
+          className="field"
         />
       </div>
 
       <div>
-        <label htmlFor="status" className={labelClass}>Status</label>
+        <label htmlFor="status" className="field-label">Status</label>
         <select
           id="status"
           value={status}
           onChange={(e) => setStatus(e.target.value as BookStatus)}
-          className={fieldClass}
+          className="field"
         >
           {STATUSES.map((s) => (
             <option key={s} value={s}>{s}</option>
@@ -140,28 +136,28 @@ export default function BookForm({
       </div>
 
       <div>
-        <label htmlFor="notes" className={labelClass}>Notes</label>
+        <label htmlFor="notes" className="field-label">Notes</label>
         <textarea
           id="notes"
           rows={4}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className={fieldClass}
+          className="field"
         />
       </div>
 
       {saveError && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">{saveError}</p>
+        <p role="alert" className="error-text">{saveError}</p>
       )}
 
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          className="min-h-11 rounded-md bg-zinc-900 px-5 py-2 text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="btn"
         >
           {submitLabel}
         </button>
-        <Link href={cancelHref} className="text-zinc-600 underline dark:text-zinc-400">
+        <Link href={cancelHref} className="text-link">
           Cancel
         </Link>
       </div>

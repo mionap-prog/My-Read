@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
+/* Design tokens. Values and reasons are in docs/brand-guide.md. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --page: #163a25;
+  --banner: url("/banner.svg");
+  /* Banner is 3:1. Height = window width / 3, so it is always at least as wide
+     as the window. Never below 220px tall (phones crop the sides). */
+  --banner-h: max(220px, calc(100vw / 3));
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --page: #0a1915;
+    --banner: url("/banner-dark.svg");
   }
 }
 
+@theme inline {
+  --color-page: var(--page);
+  --color-cream: #f4eedc;
+  --color-card: #f7f1e3;
+  --color-ink: #2a1e1c;
+  --color-muted: #6b5b4e;
+  --color-coral: #e9493e;
+  --color-coral-dark: #c93a30;
+  --color-alert: #ffb4a8; /* error text on green */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
+}
+
+html {
+  background-color: var(--page);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--page);
+  background-image: var(--banner);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: auto var(--banner-h);
+  /* Keep the cards above the picture. */
+  padding-bottom: var(--banner-h);
+  color: var(--color-cream);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-cream);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .heading {
+    @apply font-display font-semibold tracking-tight text-cream;
+  }
+  /* Coral pill button (links and buttons). */
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-coral px-6 py-2 font-display text-[1.2rem] font-bold text-cream hover:bg-coral-dark;
+  }
+  .btn-outline {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full border-2 border-cream px-6 py-2 font-display text-[1.2rem] font-bold text-cream hover:bg-cream/10;
+  }
+  .text-link {
+    @apply inline-flex min-h-11 items-center text-cream underline underline-offset-4 hover:text-cream/80;
+  }
+  .field {
+    @apply mt-1 block min-h-11 w-full rounded-lg border border-card bg-card px-3 py-2 text-base text-ink;
+  }
+  .field-label {
+    @apply block text-sm font-medium text-cream;
+  }
+  .card {
+    @apply rounded-xl bg-card text-ink;
+  }
+  .card :focus-visible {
+    outline-color: var(--color-ink);
+  }
+  .empty-state {
+    @apply rounded-xl border-2 border-dashed border-cream/50 p-4 text-cream;
+  }
+  .error-text {
+    @apply text-sm text-alert;
+  }
 }
