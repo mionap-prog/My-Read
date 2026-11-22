@@ -9,7 +9,7 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 - Before writing code, read the relevant bundled guide in `node_modules/next/dist/docs/01-app/` (AGENTS.md rule). Already checked: dynamic route `params` is a `Promise` (`await params` in a server page, `use(params)` or `useParams()` in a client component); browser-only APIs such as `localStorage` need a Client Component (`'use client'`).
 - App Router only, never `pages/`. New pages in `app/`, shared components in `app/components/`.
 - No new npm packages without asking. No secrets in source files.
-- Tailwind defaults, clean and simple (`docs/brand-guide.md`).
+- Follow `docs/brand-guide.md` for colours, fonts and styles.
 - Commit after each stable step. Run `npm run lint` and `npm run build` before each commit.
 - Books saved earlier must keep working. Any new Book field is optional (missing means "not set"), `isBook()` accepts books without it, and nothing rewrites stored data.
 
@@ -41,24 +41,35 @@ The Book fields come from `docs/data-model.md`: `id`, `title` (required), `autho
 8. **[DONE] Final checks and README.**
    Run `npm run lint` and `npm run build`. Walk through every "Done means" item below. Update `README.md` (what it is, how to run, a screenshot) and `AGENTS.md` (pages, data storage, rules), as `108.md` asks for the submission.
 
-9. **Design pass: a clean, consistent look.**
-   **Before building, ask me for direction:** tone, colours, fonts, spacing and button shape. Save the answers in `docs/brand-guide.md` (replace "Not decided yet"), with the concrete tokens and Tailwind classes chosen.
-   Change what exists, don't add copies: define colours and fonts as tokens in `app/globals.css` and remove the `font-family: Arial` override that hides the Geist font; extract a shared `BookRow` in `app/components/` (the same row is repeated in `app/page.tsx` and `app/books/page.tsx`); share button and field styles (now repeated inline in `page.tsx`, `books/page.tsx`, `BookForm.tsx`, `books/[id]/page.tsx`, `Header.tsx`). Restyle header, headings, lists, empty states, forms and status labels. No behaviour change.
+9. **Home page, header and two new list pages.**
+   - Two new pages: `/books/read` lists all books with status Read, and `/books/next` lists all books with status Want to read, newest first (same order as the home page, see Assumptions). Each has its own friendly empty message, and each book links to its page. Reuse the existing list components, don't copy them.
+   - Header links, in this order: Home, All books, Last reads (`/books/read`), Next reads (`/books/next`). Remove "New entry" from the header; the button on the home page stays.
+   - Home page: "My Reads" on the left, the "New entry" button on the right. Then three sections in this order: Currently reading (all books with status Reading), Next 3 I want to read, Last 3 read. Each has its own friendly empty message. "Next 3" and "Last 3" end with a "See all" link to their page.
+   - No data change.
    **Done means:**
-   - `docs/brand-guide.md` records my choices and the tokens, and AGENTS.md still points to it.
-   - Every page uses the same colours, fonts, spacing and button shape, with no leftover default styling.
-   - Text is readable in light and dark, nothing overflows at 1280 px and 375 px, touch targets are at least 44 px.
+   - The header shows the four links and highlights the current page.
+   - Every page shows the right books; changing a book's status moves it to the right section and page after saving.
+   - Empty messages show where there are no books; it works at 1280 px and 375 px.
+   - Lint and build pass, and AGENTS.md lists the new pages.
+
+10. **Design pass.**
+   Direction is decided (no need to ask):
+   - Background on every page: `public/banner.svg`, pinned to the bottom of the page, centred, not repeating. Everything above it is flat green `#163A25`. Leave enough space at the bottom so the cards never cover the picture.
+   - Dark mode (`prefers-color-scheme: dark`): use `public/banner-dark.svg` and flat green `#0A1915` instead.
+   - On phones, the picture is at least 220 px tall, centred, with the sides cropped.
+   - Headings and buttons use the Fraunces font, loaded with `next/font/google` (no new npm package). Book titles and other text use Geist.
+   - Colours: cream text `#F4EEDC` on the green; cream cards `#F7F1E3` with dark text `#2A1E1C` and grey-brown `#6B5B4E` for authors; buttons are coral `#E9493E` pills with cream text. The header is green with cream links and an underline for the current page.
+   Keep the technical parts of the old design step: define colours and fonts as tokens in `app/globals.css` and remove the `font-family: Arial` override; extract a shared `BookRow` in `app/components/`; share button and field styles instead of repeating them inline. Restyle header, headings, lists, empty states, forms, the book page and status labels. No behaviour change.
+   **Done means:**
+   - `docs/brand-guide.md` records these choices and tokens (replace "Not decided yet"), and AGENTS.md still points to it.
+   - Every page has the same look in light and dark mode, with no leftover default styling.
+   - Text is readable, nothing overflows at 1280 px and 375 px, touch targets are at least 44 px.
    - All "Done means" items below still pass, and `npm run lint` and `npm run build` pass.
 
 ## Extras (only if time)
-Not required. Do them in this order, one at a time, only after step 9. Each follows the rules above (commit per extra, lint and build, update `docs/data-model.md` and `AGENTS.md` when data or pages change). Mark one `[DONE]` when finished.
+Not required. Do them in this order, one at a time, only after step 10. Each follows the rules above (commit per extra, lint and build, update `docs/data-model.md` and `AGENTS.md` when data or pages change). Mark one `[DONE]` when finished.
 
-**Extra 1. "Currently reading" on the home page.**
-In `app/page.tsx`, add a "Currently reading" section for books with status Reading, above "Last 3 read". Reuse `BookList` and the filter next to `latestWithStatus` (give it a limit; show all Reading books). Own empty message. No data change.
-Done means:
-- Books with status Reading appear under "Currently reading", and changing a book's status moves it between sections after saving.
-- With no Reading books a friendly empty message shows, and the loading state matches the other sections.
-- Each entry links to its page, looks consistent with step 9, and works at 375 px.
+**Extra 1. Moved into step 9.**
 
 **Extra 2. Dates.**
 Add optional `startedAt` and `finishedAt` to `Book` and `NewBook`, stored as `YYYY-MM-DD` (from `<input type="date">`, so no time-zone shifts). `isBook()` accepts them missing and rejects malformed values. In `BookForm.tsx`, "Started" shows for Reading and Read, "Finished" only for Read, nothing for Want to read; finish before start is rejected with an inline message; dates that don't fit the status are dropped on save; when status becomes Read and "Finished" is empty, prefill today (editable). Show dates on `/books` rows and the book page. "Last 3 read" sorts by `finishedAt` (fallback `addedAt` for books without one); "Currently reading" sorts by `startedAt` (fallback `addedAt`). Put the shared "effective date" helper in `app/lib/books.ts`. This replaces the "last 3 read" assumption below.
@@ -123,4 +134,6 @@ A second reader (needs accounts and a backend).
 4. Reload, then close and reopen the tab: all changes remain.
 5. Clear the list: the empty-state messages show on `/` and `/books`. Open `/books/unknown-id`: friendly not-found message.
 6. Resize to 1280 px and 375 px (browser dev tools): layout works and text is readable.
-7. `npm run lint` and `npm run build` both pass.
+7. Open `/books/read` and `/books/next` and check they list the right books.
+8. Switch the computer to dark mode and check every page.
+9. `npm run lint` and `npm run build` both pass.
